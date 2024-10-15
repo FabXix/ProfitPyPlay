@@ -8,12 +8,35 @@ fake = Faker()
 
 class Company:
     def __init__(self, name, value, income):
-        self.name = name
-        self.value = value
-        self.income = income
+        self._name = name
+        self._value = value
+        self._income = income
         self.previous_income = income
         self.previous_rank = None
         self.news = []
+
+    @property
+    def name(self):
+        return self._name
+    
+    @property
+    def income(self):
+        return self._income
+    
+    @income.setter
+    def income(self, new_income):
+        self._income = new_income
+
+    @property
+    def value(self):
+        return self._value
+    
+    @value.setter
+    def value(self, new_value):
+        if new_value >= 0:
+            self._value = new_value
+        else:
+            raise ValueError("El valor de la empresa no puede ser negativo.")
 
     def simulate_value_change(self):
         growth_rate = random.uniform(-0.2, 0.2)
@@ -30,10 +53,21 @@ class Company:
 
 class User:
     def __init__(self, balance):
-        self.balance = balance
+        self._balance = balance
         self.investments = {}
         self.total_invested = 0
         self.total_profit_loss = 0
+        
+    @property
+    def balance(self):
+        return self._balance
+    
+    @balance.setter
+    def balance(self, new_balance):
+        if new_balance >= 0:
+            self._balance = new_balance
+        else:
+            raise ValueError("El balance no puede ser negativo.")
 
     def invest_in_company(self, company, amount):
         if amount > self.balance:
